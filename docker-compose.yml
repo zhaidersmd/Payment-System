@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - payment-postgres-data-v2:/var/lib/postgresql/data
+      - payment-postgres-data:/var/lib/postgresql/data
 
 volumes:
-  payment-postgres-data-v2:
+  payment-postgres-data:

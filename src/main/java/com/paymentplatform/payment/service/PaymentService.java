@@ -121,12 +121,12 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
-        if (payment.getStatus() == PaymentStatus.AUTHORIZED) {
+        if (payment.getStatus() != PaymentStatus.AUTHORIZED) {
             throw new InvalidPaymentStateException("Payment cannot be captured from status "
                     + payment.getStatus());
         }
 
-        payment.setStatus(PaymentStatus.AUTHORIZED);
+        payment.setStatus(PaymentStatus.CAPTURED);
         return toResponse(payment);
     }
     @Transactional
@@ -147,6 +147,7 @@ public class PaymentService {
 
         return toResponse(payment);
     }
+
 
     public PaymentStatus getPaymentStatus(UUID paymentId) {
 
