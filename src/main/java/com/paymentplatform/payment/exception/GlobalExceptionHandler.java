@@ -1,6 +1,9 @@
 package com.paymentplatform.payment.exception;
 
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,6 +39,16 @@ public class GlobalExceptionHandler {
                 "message", exception.getMessage()
         );
 
+    }
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public Map<String, Object> handleOptimisticLockingFailure(
+            ObjectOptimisticLockingFailureException exception) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.CONFLICT,
+                "error", "CONCURRENT_UPDATE",
+                "message", "Payment was modified by another request"
+        );
     }
 
 }
