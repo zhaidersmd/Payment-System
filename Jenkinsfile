@@ -27,9 +27,17 @@ pipeline {
                 sh '''
                     ./mvnw clean package -DskipTests
 
-                    nohup java -jar target/payment-service-0.0.1-SNAPSHOT.jar > payment-service.log 2>&1 &
+                    JAR=$(find target -maxdepth 1 -name 'payment-service-*.jar' ! -name '*original*.jar' | head -n 1)
+                    echo "Starting $JAR"
+
+                    JENKINS_NODE_COOKIE=dontKillMe \
+                                nohup java -jar "$JAR" \
+                                > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
+                    sleep 5
+                    cat payment-service.log
+
                 '''
             }
         }
