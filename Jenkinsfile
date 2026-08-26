@@ -27,8 +27,7 @@ pipeline {
                 sh '''
                     ./mvnw clean package -DskipTests
 
-                    nohup java -jar target/payment-service-0.0.1-SNAPSHOT.jar \
-                        > payment-service.log 2>&1 &
+                    nohup java -jar target/payment-service-0.0.1-SNAPSHOT.jar > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
                 '''
