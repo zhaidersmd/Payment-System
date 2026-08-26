@@ -5,6 +5,7 @@ import com.paymentplatform.payment.dto.PaymentResponse;
 import com.paymentplatform.payment.dto.UpdatePaymentRequest;
 import com.paymentplatform.payment.entity.Payment;
 import com.paymentplatform.payment.entity.PaymentStatus;
+import com.paymentplatform.payment.exception.InvalidPaymentStateException;
 import com.paymentplatform.payment.exception.PaymentNotFoundException;
 import com.paymentplatform.payment.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
@@ -100,6 +101,60 @@ public class PaymentService {
                         new PaymentNotFoundException(paymentId));
 
         paymentRepository.delete(payment);
+    }
+
+
+    public PaymentResponse authorizePayment(UUID paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+
+        if (payment.getStatus() != PaymentStatus.CREATED) {
+            throw new InvalidPaymentStateException(
+                    "Payment cannot be authorized from status " + payment.getStatus());
+        }
+        payment.setStatus(PaymentStatus.AUTHORIZED);
+        return toResponse(paymentRepository.save(payment));
+
+    }
+
+    public PaymentResponse capturePayment(UUID patientId) {
+        Payment payment = paymentRepository.findById(patientId)
+                .orElseThrow(() -> new PaymentNotFoundException(patientId));
+
+        if (payment.getStatus() == PaymentStatus.AUTHORIZED) {
+            throw new InvalidPaymentStateException("Payment cannot be captured from status "
+                    + payment.getStatus());
+        }
+
+        payment.setStatus(PaymentStatus.CAPTURED);
+        return toResponse(paymentRepository.save(payment));
+    }
+
+    public PaymentResponse refundPayment(UUID paymentId) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        new PaymentNotFoundException(paymentId ));
+
+        if (payment.getStatus() != PaymentStatus.CAPTURED) {
+            throw new InvalidPaymentStateException(
+                    "Payment cannot be refunded from status "
+                            + payment.getStatus()
+            );
+        }
+
+        payment.setStatus(PaymentStatus.REFUNDED);
+
+        return toResponse(paymentRepository.save(payment));
+    }
+
+    public PaymentStatus getPaymentStatus(UUID paymentId) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        new PaymentNotFoundException(paymentId));
+
+        return payment.getStatus();
     }
 
 

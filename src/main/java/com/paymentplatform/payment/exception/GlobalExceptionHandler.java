@@ -26,4 +26,16 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidPaymentStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleInvalidPaymentState(InvalidPaymentStateException exception) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 400,
+                "error", "INVALID_PAYMENT_STATE",
+                "message", exception.getMessage()
+        );
+
+    }
+
 }
