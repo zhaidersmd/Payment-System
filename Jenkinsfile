@@ -24,7 +24,7 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh './mvnw clean spring-boot:run -Dmaven.test.skip=true'
+                sh './mvnw package -DskipTests'
             }
         }
     }
