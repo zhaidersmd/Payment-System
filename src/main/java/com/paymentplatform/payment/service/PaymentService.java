@@ -103,7 +103,7 @@ public class PaymentService {
         paymentRepository.delete(payment);
     }
 
-
+    @Transactional
     public PaymentResponse authorizePayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
@@ -113,23 +113,23 @@ public class PaymentService {
                     "Payment cannot be authorized from status " + payment.getStatus());
         }
         payment.setStatus(PaymentStatus.AUTHORIZED);
-        return toResponse(paymentRepository.save(payment));
+        return toResponse(payment);
 
     }
+    @Transactional
+    public PaymentResponse capturePayment(UUID paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
-    public PaymentResponse capturePayment(UUID patientId) {
-        Payment payment = paymentRepository.findById(patientId)
-                .orElseThrow(() -> new PaymentNotFoundException(patientId));
-
-        if (payment.getStatus() == PaymentStatus.AUTHORIZED) {
+        if (payment.getStatus() != PaymentStatus.AUTHORIZED) {
             throw new InvalidPaymentStateException("Payment cannot be captured from status "
                     + payment.getStatus());
         }
 
         payment.setStatus(PaymentStatus.CAPTURED);
-        return toResponse(paymentRepository.save(payment));
+        return toResponse(payment);
     }
-
+    @Transactional
     public PaymentResponse refundPayment(UUID paymentId) {
 
         Payment payment = paymentRepository.findById(paymentId)
@@ -145,8 +145,9 @@ public class PaymentService {
 
         payment.setStatus(PaymentStatus.REFUNDED);
 
-        return toResponse(paymentRepository.save(payment));
+        return toResponse(payment);
     }
+
 
     public PaymentStatus getPaymentStatus(UUID paymentId) {
 

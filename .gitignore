@@ -31,3 +31,28 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+*.env
+
+# Spring
+application-local.yml
+application-local.properties
