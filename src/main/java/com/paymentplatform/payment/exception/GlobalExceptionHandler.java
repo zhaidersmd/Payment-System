@@ -51,4 +51,15 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IdempotencyKeyConflictException.class)
+    public Map<String, Object> handleIdempotencyKeyConflictException(
+            IdempotencyKeyConflictException exception) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.CONFLICT,
+                "error", "IdempotencyKeyConflictException",
+                "message", "Idempotency-Key has already been used with a different request"
+        );
+    }
+
 }
