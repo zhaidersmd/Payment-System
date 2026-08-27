@@ -33,12 +33,14 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final IdempotencyRecordRepository recordRepository;
     private final ObjectMapper objectMapper;
+    private final PaymentStatusCacheService cacheService;
 
 
-    public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper) {
+    public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper, PaymentStatusCacheService cacheService) {
         this.paymentRepository = paymentRepository;
         this.recordRepository = recordRepository;
         this.objectMapper = objectMapper;
+        this.cacheService = cacheService;
     }
 
 
@@ -137,7 +139,7 @@ public class PaymentService {
         return response;
     }
 
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public PaymentResponse getPayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow( () -> new PaymentNotFoundException(paymentId));
@@ -228,13 +230,23 @@ public class PaymentService {
     }
 
 
-    public PaymentStatus getPaymentStatus(UUID paymentId) {
+    public PaymentResponse getPaymentStatus(UUID paymentId) {
+        log.info("going to check if cache exists");
+        PaymentResponse cachedResponse = cacheService.get(paymentId);
 
+        if (cachedResponse != null) {
+            log.info("Sending data from redis");
+            return cachedResponse;
+        }
+        log.info("Sending data from postgres");
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() ->
-                        new PaymentNotFoundException(paymentId));
+                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
-        return payment.getStatus();
+        PaymentResponse response = toResponse(payment);
+
+        cacheService.put(paymentId, response);
+
+        return response;
     }
 
 
