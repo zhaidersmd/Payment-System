@@ -1,0 +1,6 @@
+HTTP/1.1 409 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Thu, 27 Aug 2026 07:49:53 GMT
+
+{"error":"DATA_INTEGRITY_VIOLATION","status":409,"timestamp":"2026-08-27T13:19:53.918774","message":"The request could not be completed because it violates a data integrity constraint."}

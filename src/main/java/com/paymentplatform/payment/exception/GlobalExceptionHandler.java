@@ -1,17 +1,15 @@
 package com.paymentplatform.payment.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -42,7 +40,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public Map<String, Object> handleOptimisticLockingFailure(
-            ObjectOptimisticLockingFailureException exception) {
+            OptimisticLockingFailureException exception) {
         return Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.CONFLICT,
@@ -59,6 +57,18 @@ public class GlobalExceptionHandler {
                 "status", HttpStatus.CONFLICT,
                 "error", "IdempotencyKeyConflictException",
                 "message", "Idempotency-Key has already been used with a different request"
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDataIntegrityViolationException(
+            DataIntegrityViolationException exception) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.CONFLICT.value(),
+                "error", "IDEMPOTENCY_CONFLICT",
+                "message", "A request with this idempotency key is already being processed."
         );
     }
 
