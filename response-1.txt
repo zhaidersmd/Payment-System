@@ -1,0 +1,6 @@
+HTTP/1.1 201 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Thu, 27 Aug 2026 07:49:53 GMT
+
+{"paymentId":"9c17630d-54f9-482a-8266-74dd6bc9b1b6","customerId":"C99999","amount":1000,"currency":"INR","status":"CREATED","createdAt":"2026-08-27T13:19:53.861224"}
