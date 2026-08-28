@@ -63,6 +63,7 @@ pipeline {
                                 nohup java -jar "$JAR" \
                                     --spring.datasource.url=jdbc:postgresql://host.docker.internal:5432/paymentdb \
                                     --spring.kafka.bootstrap-servers=host.docker.internal:9002
+                                    --spring.data.redis.host=host.docker.internal
                                     > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
