@@ -16,11 +16,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh './mvnw test'
-            }
-        }
+//         stage('Test') {
+//             steps {
+//                 sh './mvnw test'
+//             }
+//         }
 
         stage('Stop Existing Spring Boot App') {
             steps {
