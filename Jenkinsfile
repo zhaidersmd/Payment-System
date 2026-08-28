@@ -78,7 +78,12 @@ pipeline {
                     echo "KAFKA_URL=$KAFKA_URL"
                     echo "REDIS_URL=$REDIS_URL"
 
-                    nohup java -jar "$JAR" > payment-service.log 2>&1 &
+                    nohup env \
+                        DATASOURCE_URL="$DATASOURCE_URL" \
+                        KAFKA_URL="$KAFKA_URL" \
+                        REDIS_URL="$REDIS_URL" \
+                        java -jar "$JAR" \
+                        > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
                     sleep 5
