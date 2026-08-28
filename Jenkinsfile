@@ -32,7 +32,8 @@ pipeline {
 
                     JENKINS_NODE_COOKIE=dontKillMe \
                                 nohup java -jar "$JAR" \
-                                > payment-service.log 2>&1 &
+                                    --spring.datasource.url=jdbc:postgresql://host.docker.internal:5432/paymentdb \
+                                    > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
                     sleep 5
