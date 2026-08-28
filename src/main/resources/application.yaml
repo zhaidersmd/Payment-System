@@ -3,7 +3,7 @@ spring:
     name: payment-service
 
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/paymentdb
+    url: jdbc:postgresql://localhost:5432/paymentdb
     username: payment_user
     password: payment_password
     driver-class-name: org.postgresql.Driver
@@ -36,5 +36,5 @@ management:
 
   data:
     redis:
-      host: host.docker.internal
+      host: localhost
       port: 6379

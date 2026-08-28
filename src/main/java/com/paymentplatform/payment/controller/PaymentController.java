@@ -3,7 +3,6 @@ package com.paymentplatform.payment.controller;
 import com.paymentplatform.payment.dto.CreatePaymentRequest;
 import com.paymentplatform.payment.dto.PaymentResponse;
 import com.paymentplatform.payment.dto.UpdatePaymentRequest;
-import com.paymentplatform.payment.entity.Payment;
 import com.paymentplatform.payment.entity.PaymentStatus;
 import com.paymentplatform.payment.service.PaymentService;
 import com.paymentplatform.payment.service.PaymentStatusCacheService;
@@ -11,7 +10,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
