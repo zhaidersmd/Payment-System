@@ -86,3 +86,130 @@
 2026-08-28T01:45:17.094+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-2] c.p.payment.service.PaymentService       : Sending data from postgres
 2026-08-28T01:45:18.340+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-4] c.p.payment.service.PaymentService       : going to check if cache exists
 2026-08-28T01:45:18.371+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-4] c.p.payment.service.PaymentService       : Sending data from redis
+2026-08-28T01:50:00.981+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-6] c.p.payment.service.PaymentService       : going to check if cache exists
+2026-08-28T01:50:00.991+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-6] c.p.payment.service.PaymentService       : Sending data from postgres
+2026-08-28T01:50:01.680+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-7] c.p.payment.service.PaymentService       : going to check if cache exists
+2026-08-28T01:50:01.684+05:30  INFO 9215 --- [payment-service] [nio-4000-exec-7] c.p.payment.service.PaymentService       : Sending data from redis
+2026-08-28T03:52:52.725+05:30  WARN 9215 --- [payment-service] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h1m9s805ms).
+2026-08-28T04:44:31.910+05:30  WARN 9215 --- [payment-service] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=51m9s170ms).
+2026-08-28T05:08:22.250+05:30  INFO 9215 --- [payment-service] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 3 deletions, 0 modifications)
+2026-08-28T05:08:22.316+05:30  INFO 9215 --- [payment-service] [       Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-28T05:08:22.340+05:30  INFO 9215 --- [payment-service] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-08-28T05:08:22.503+05:30  INFO 9215 --- [payment-service] [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-28T05:08:22.515+05:30  INFO 9215 --- [payment-service] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-28T05:08:22.527+05:30  INFO 9215 --- [payment-service] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-08-28T05:08:23.469+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : Starting PaymentServiceApplication using Java 21.0.11 with PID 9215 (/Users/zeeshanhaider/IdeaProjects/payment-service/target/classes started by zeeshanhaider in /Users/zeeshanhaider/IdeaProjects/payment-service)
+2026-08-28T05:08:23.473+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-08-28T05:08:24.507+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-28T05:08:24.507+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-28T05:08:24.548+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 37 ms. Found 2 JPA repository interfaces.
+2026-08-28T05:08:24.555+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-28T05:08:24.555+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-08-28T05:08:24.563+05:30  INFO 9215 --- [payment-service] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.paymentplatform.payment.repository.IdempotencyRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-08-28T05:08:24.564+05:30  INFO 9215 --- [payment-service] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.paymentplatform.payment.repository.PaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-08-28T05:08:24.564+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2026-08-28T05:08:24.830+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-08-28T05:08:24.847+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-28T05:08:24.847+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-08-28T05:08:24.876+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-28T05:08:24.876+05:30  INFO 9215 --- [payment-service] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1378 ms
+2026-08-28T05:08:25.045+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-08-28T05:08:25.122+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@14d35ef7
+2026-08-28T05:08:25.123+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-08-28T05:08:25.130+05:30  INFO 9215 --- [payment-service] [  restartedMain] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/paymentdb (PostgreSQL 16.14)
+2026-08-28T05:08:25.175+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.016s)
+2026-08-28T05:08:25.235+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 2
+2026-08-28T05:08:25.236+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-08-28T05:08:25.276+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-28T05:08:25.282+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-28T05:08:25.311+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-28T05:08:25.327+05:30  WARN 9215 --- [payment-service] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-08-28T05:08:25.330+05:30  INFO 9215 --- [payment-service] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 16.14
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-28T05:08:25.483+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-28T05:08:25.498+05:30  INFO 9215 --- [payment-service] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-28T05:08:25.748+05:30  WARN 9215 --- [payment-service] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-08-28T05:08:25.972+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-08-28T05:08:25.979+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-08-28T05:08:26.019+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-08-28T05:08:26.032+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : Started PaymentServiceApplication in 2.804 seconds (process running for 1919.169)
+2026-08-28T05:08:26.047+05:30  INFO 9215 --- [payment-service] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-08-28T05:08:27.408+05:30  INFO 9215 --- [payment-service] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 4 class path changes (4 additions, 0 deletions, 0 modifications)
+2026-08-28T05:08:27.413+05:30  INFO 9215 --- [payment-service] [       Thread-7] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-28T05:08:27.419+05:30  INFO 9215 --- [payment-service] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-08-28T05:08:27.432+05:30  INFO 9215 --- [payment-service] [       Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-28T05:08:27.433+05:30  INFO 9215 --- [payment-service] [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-08-28T05:08:27.435+05:30  INFO 9215 --- [payment-service] [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-08-28T05:08:27.802+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : Starting PaymentServiceApplication using Java 21.0.11 with PID 9215 (/Users/zeeshanhaider/IdeaProjects/payment-service/target/classes started by zeeshanhaider in /Users/zeeshanhaider/IdeaProjects/payment-service)
+2026-08-28T05:08:27.806+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-08-28T05:08:28.270+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-28T05:08:28.271+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-28T05:08:28.301+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 2 JPA repository interfaces.
+2026-08-28T05:08:28.303+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-28T05:08:28.303+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-08-28T05:08:28.308+05:30  INFO 9215 --- [payment-service] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.paymentplatform.payment.repository.IdempotencyRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-08-28T05:08:28.309+05:30  INFO 9215 --- [payment-service] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.paymentplatform.payment.repository.PaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-08-28T05:08:28.309+05:30  INFO 9215 --- [payment-service] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2026-08-28T05:08:28.479+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-08-28T05:08:28.486+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-28T05:08:28.489+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-08-28T05:08:28.513+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-28T05:08:28.513+05:30  INFO 9215 --- [payment-service] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 686 ms
+2026-08-28T05:08:28.621+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-08-28T05:08:28.692+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@3f5cbd42
+2026-08-28T05:08:28.693+05:30  INFO 9215 --- [payment-service] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-08-28T05:08:28.700+05:30  INFO 9215 --- [payment-service] [  restartedMain] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/paymentdb (PostgreSQL 16.14)
+2026-08-28T05:08:28.734+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.008s)
+2026-08-28T05:08:28.773+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 2
+2026-08-28T05:08:28.774+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-08-28T05:08:28.793+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-28T05:08:28.797+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-28T05:08:28.820+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-28T05:08:28.829+05:30  WARN 9215 --- [payment-service] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-08-28T05:08:28.831+05:30  INFO 9215 --- [payment-service] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 16.14
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-28T05:08:29.003+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-28T05:08:29.019+05:30  INFO 9215 --- [payment-service] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-28T05:08:29.214+05:30  WARN 9215 --- [payment-service] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-08-28T05:08:29.359+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-08-28T05:08:29.362+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-08-28T05:08:29.406+05:30  INFO 9215 --- [payment-service] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-08-28T05:08:29.415+05:30  INFO 9215 --- [payment-service] [  restartedMain] c.p.payment.PaymentServiceApplication    : Started PaymentServiceApplication in 1.794 seconds (process running for 1922.552)
+2026-08-28T05:08:29.418+05:30  INFO 9215 --- [payment-service] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-08-28T05:09:36.687+05:30  INFO 9215 --- [payment-service] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-28T05:09:36.695+05:30  INFO 9215 --- [payment-service] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-08-28T05:09:36.708+05:30  INFO 9215 --- [payment-service] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-28T05:09:36.710+05:30  INFO 9215 --- [payment-service] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-08-28T05:09:36.716+05:30  INFO 9215 --- [payment-service] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
