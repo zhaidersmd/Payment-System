@@ -3,14 +3,13 @@ package com.paymentplatform.payment.controller;
 import com.paymentplatform.payment.dto.CreatePaymentRequest;
 import com.paymentplatform.payment.dto.PaymentResponse;
 import com.paymentplatform.payment.dto.UpdatePaymentRequest;
-import com.paymentplatform.payment.entity.Payment;
 import com.paymentplatform.payment.entity.PaymentStatus;
 import com.paymentplatform.payment.service.PaymentService;
+import com.paymentplatform.payment.service.PaymentStatusCacheService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -20,8 +19,10 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    public PaymentController(PaymentService paymentService) {
+
+    public PaymentController(PaymentService paymentService, PaymentStatusCacheService cacheService) {
         this.paymentService = paymentService;
+
     }
 
     @PostMapping
@@ -86,17 +87,16 @@ public class PaymentController {
             @PathVariable UUID id) {
 
         PaymentResponse response = paymentService.refundPayment(id);
-
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/status")
-    public ResponseEntity<PaymentStatus> getPaymentStatus(
-            @PathVariable UUID id) {
+    @GetMapping("/{paymentId}/status")
+    public ResponseEntity<PaymentResponse> getPaymentStatus(
+            @PathVariable UUID paymentId) {
 
-        return ResponseEntity.ok(
-                paymentService.getPaymentStatus(id)
-        );
+        return ResponseEntity.ok(paymentService.getPaymentStatus(paymentId));
+
+
     }
 
 }
