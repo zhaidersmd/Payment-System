@@ -69,12 +69,16 @@ pipeline {
                     JAR=$(find target -maxdepth 1 -name 'payment-service-*.jar' ! -name '*original*.jar' | head -n 1)
                     echo "Starting $JAR"
 
-                    JENKINS_NODE_COOKIE=dontKillMe \
-                                nohup java -jar "$JAR" \
-                                    DATASOURCE_URL="jdbc:postgresql://host.docker.internal:5432/paymentdb" \
-                                    KAFKA_URL="host.docker.internal:9002" \
-                                    REDIS_URL="host.docker.internal" \
-                                    > payment-service.log 2>&1 &
+                    export JENKINS_NODE_COOKIE=dontKillMe
+                    export DATASOURCE_URL="jdbc:postgresql://host.docker.internal:5432/paymentdb"
+                    export KAFKA_URL="host.docker.internal:9002"
+                    export REDIS_URL="host.docker.internal"
+
+                    echo "DATASOURCE_URL=$DATASOURCE_URL"
+                    echo "KAFKA_URL=$KAFKA_URL"
+                    echo "REDIS_URL=$REDIS_URL"
+
+                    nohup java -jar "$JAR" > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
                     sleep 5
