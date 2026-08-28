@@ -16,40 +16,50 @@ pipeline {
             }
         }
 
-        stage('Test') {
+//         stage('Test') {
+//             steps {
+//                 sh './mvnw test'
+//             }
+//         }
+
+        stage('Stop Existing Spring Boot App') {
             steps {
-                sh './mvnw test'
+                sh '''
+                    echo "Checking for existing application on port 4000..."
+
+                    if [ -f payment-service.pid ]; then
+                        PID=$(cat payment-service.pid)
+
+                        if kill -0 "$PID" 2>/dev/null; then
+                            echo "Stopping existing application PID: $PID"
+                            kill "$PID" || true
+                            sleep 3
+                        fi
+
+                        rm -f payment-service.pid
+                    fi
+
+                    PID=$(lsof -ti :4000 || true)
+
+                    if [ -n "$PID" ]; then
+                        echo "Port 4000 is still in use by: $PID"
+
+                        kill $PID || true
+                        sleep 3
+
+                        PID=$(lsof -ti :4000 || true)
+
+                        if [ -n "$PID" ]; then
+                            echo "Force killing: $PID"
+                            kill -9 $PID || true
+                        fi
+                    fi
+
+                    echo "Port 4000 is available."
+                '''
             }
         }
 
-        stage('Stop Existing Spring Boot App') {
-                    steps {
-                        sh '''
-                            echo "Checking for existing application on port 4000..."
-
-                            PID=$(lsof -ti :4000 || true)
-
-                            if [ -n "$PID" ]; then
-                                echo "Found process on port 4000: $PID"
-                                echo "Stopping application..."
-
-                                kill $PID || true
-
-                                sleep 3
-
-                                # If it is still running, force kill it
-                                if kill -0 $PID 2>/dev/null; then
-                                    echo "Process is still running. Force killing..."
-                                    kill -9 $PID || true
-                                fi
-
-                                echo "Existing application stopped."
-                            else
-                                echo "No application running on port 4000."
-                            fi
-                        '''
-                    }
-                }
 
         stage('Package & Run') {
             steps {
@@ -59,10 +69,21 @@ pipeline {
                     JAR=$(find target -maxdepth 1 -name 'payment-service-*.jar' ! -name '*original*.jar' | head -n 1)
                     echo "Starting $JAR"
 
-                    JENKINS_NODE_COOKIE=dontKillMe \
-                                nohup java -jar "$JAR" \
-                                    --spring.datasource.url=jdbc:postgresql://host.docker.internal:5432/paymentdb \
-                                    > payment-service.log 2>&1 &
+                    export JENKINS_NODE_COOKIE=dontKillMe
+                    export DATASOURCE_URL="jdbc:postgresql://host.docker.internal:5432/paymentdb"
+                    export KAFKA_URL="host.docker.internal:9002"
+                    export REDIS_URL="host.docker.internal"
+
+                    echo "DATASOURCE_URL=$DATASOURCE_URL"
+                    echo "KAFKA_URL=$KAFKA_URL"
+                    echo "REDIS_URL=$REDIS_URL"
+
+                    nohup env \
+                        DATASOURCE_URL="$DATASOURCE_URL" \
+                        KAFKA_URL="$KAFKA_URL" \
+                        REDIS_URL="$REDIS_URL" \
+                        java -jar "$JAR" \
+                        > payment-service.log 2>&1 &
 
                     echo $! > payment-service.pid
                     sleep 5

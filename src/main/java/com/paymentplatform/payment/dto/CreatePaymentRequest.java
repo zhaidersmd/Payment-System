@@ -19,10 +19,7 @@ public record CreatePaymentRequest (
 
         @NotBlank
         @Size(min = 3, max = 3)
-        String currency
-
-
-) {
+        String currency ) {
 
 
 }

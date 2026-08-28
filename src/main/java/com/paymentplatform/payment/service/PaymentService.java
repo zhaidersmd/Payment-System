@@ -35,14 +35,16 @@ public class PaymentService {
     private final ObjectMapper objectMapper;
     private final PaymentStatusCacheService cacheService;
     private final IdempotencyCacheService idempotencyCacheService;
+    private final OutboxEventService outboxEventService;
 
 
-    public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper, PaymentStatusCacheService cacheService, IdempotencyCacheService idempotencyCacheService) {
+    public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper, PaymentStatusCacheService cacheService, IdempotencyCacheService idempotencyCacheService, OutboxEventService outboxEventService) {
         this.paymentRepository = paymentRepository;
         this.recordRepository = recordRepository;
         this.objectMapper = objectMapper;
         this.cacheService = cacheService;
         this.idempotencyCacheService = idempotencyCacheService;
+        this.outboxEventService = outboxEventService;
     }
 
 
@@ -55,9 +57,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentResponse createPayment(
-            CreatePaymentRequest request,
-            String idempotencyKey) {
+    public PaymentResponse createPayment(CreatePaymentRequest request, String idempotencyKey) {
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -143,9 +143,24 @@ public class PaymentService {
         payment.setStatus(PaymentStatus.CREATED);
         payment.setCreatedAt(now);
         payment.setUpdatedAt(now);
+        Payment savedPayment = paymentRepository.save(payment);
 
-        Payment savedPayment =
-                paymentRepository.save(payment);
+
+//        Tested if outbox event does not save, payment instance will be rolled back
+//        if (1 == 1) {
+//            throw new RuntimeException("TEST OUTBOX FAILURE");
+//        }
+
+
+
+        outboxEventService.createPaymentCreatedEvent(
+                savedPayment.getId(),
+                savedPayment.getCustomerId(),
+                savedPayment.getAmount(),
+                savedPayment.getCurrency()
+        );
+
+
 
         PaymentResponse response =
                 toResponse(savedPayment);

@@ -72,4 +72,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> handleUnexpectedException(Exception exception) {
+
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "error", "INTERNAL_SERVER_ERROR",
+                "message", "An unexpected error occurred"
+        );
+    }
+
 }
