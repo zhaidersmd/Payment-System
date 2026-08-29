@@ -149,7 +149,7 @@ stage('Docker Build') {
                             steps {
                                 withCredentials([
                                     [$class: 'AmazonWebServicesCredentialsBinding',
-                                     credentialsId: 'aws-jenkins']
+                                     credentialsId: 'aws-patient-service']
                                 ]) {
                                     sh '''
                                         echo "Deployment image: ${ECR_REPO}:${IMAGE_TAG}"
