@@ -6,6 +6,8 @@ import com.paymentplatform.payment.dto.UpdatePaymentRequest;
 import com.paymentplatform.payment.entity.PaymentStatus;
 import com.paymentplatform.payment.service.PaymentService;
 import com.paymentplatform.payment.service.PaymentStatusCacheService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,20 @@ public class PaymentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Create a payment",
+            description = """
+                    Creates a new payment.
+                    The Idempotency-Key header is required to prevent
+                    duplicate payment creation when clients retry requests.
+                    """
+    )
     public PaymentResponse createPayment(
+            @Parameter(
+                    name = "Idempotency-Key",
+                    description = "Unique key used to prevent duplicate payment requests",
+                    required = true,
+                    example = "payment-request-123")
             @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody CreatePaymentRequest request) {
         return paymentService.createPayment(request, idempotencyKey);

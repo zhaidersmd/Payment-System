@@ -25,7 +25,7 @@ public final class RequestHashUtil {
             String canonicalRequest =
                     request.customerId()+ "|" + request.amount().stripTrailingZeros().toPlainString()
                             + "|" + request.currency().toUpperCase();
-            log.info("Canonical request: {}", canonicalRequest);
+            //log.info("Canonical request: {}", canonicalRequest);
 
             try {
                 MessageDigest digest =

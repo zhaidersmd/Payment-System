@@ -19,11 +19,8 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,6 +35,7 @@ public class PaymentService {
     private final OutboxEventService outboxEventService;
 
 
+
     public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper, PaymentStatusCacheService cacheService, IdempotencyCacheService idempotencyCacheService, OutboxEventService outboxEventService) {
         this.paymentRepository = paymentRepository;
         this.recordRepository = recordRepository;
@@ -45,6 +43,7 @@ public class PaymentService {
         this.cacheService = cacheService;
         this.idempotencyCacheService = idempotencyCacheService;
         this.outboxEventService = outboxEventService;
+
     }
 
 
@@ -59,6 +58,8 @@ public class PaymentService {
     @Transactional
     public PaymentResponse createPayment(CreatePaymentRequest request, String idempotencyKey) {
 
+
+
         LocalDateTime now = LocalDateTime.now();
 
         if (idempotencyKey == null || idempotencyKey.isBlank()) {
@@ -68,7 +69,7 @@ public class PaymentService {
 
         String requestHash =
                 RequestHashUtil.generateHash(request);
-        System.out.println("Hash is " + requestHash);
+        //System.out.println("Hash is " + requestHash);
 
 
         // =========================================================
@@ -84,7 +85,7 @@ public class PaymentService {
         // =========================================================
 
         if (existingRecord == null) {
-            System.out.println("existingRecord == null");
+            //System.out.println("existingRecord == null");
             existingRecord =
                     recordRepository
                             .findByIdempotencyKey(idempotencyKey)
@@ -96,7 +97,7 @@ public class PaymentService {
             // =====================================================
 
             if (existingRecord != null) {
-                System.out.println("Found in PostgreSQL → populate Redis");
+                //System.out.println("Found in PostgreSQL → populate Redis");
                 idempotencyCacheService.put(
                         idempotencyKey,
                         existingRecord);
@@ -109,7 +110,7 @@ public class PaymentService {
         // =========================================================
 
         if (existingRecord != null) {
-            System.out.println("Existing idempotency record. Sending from Redis");
+            //System.out.println("Existing idempotency record. Sending from Redis");
 
             if (!existingRecord.getRequestHash()
                     .equals(requestHash)) {
@@ -136,7 +137,7 @@ public class PaymentService {
 
         Payment payment = new Payment();
 
-        System.out.println("Creating payment object--");
+        //System.out.println("Creating payment object--");
         payment.setCustomerId(request.customerId());
         payment.setAmount(request.amount());
         payment.setCurrency(request.currency());
@@ -169,7 +170,7 @@ public class PaymentService {
         // =========================================================
         // Create idempotency record
         // =========================================================
-        System.out.println("Creating idempotency object--");
+        //System.out.println("Creating idempotency object--");
         IdempotencyRecord record =
                 new IdempotencyRecord();
 
@@ -181,7 +182,7 @@ public class PaymentService {
         record.setCreatedAt(now);
 
         try {
-            System.out.println("Writing Response");
+            //System.out.println("Writing Response");
             String responseBody =
                     objectMapper.writeValueAsString(response);
 

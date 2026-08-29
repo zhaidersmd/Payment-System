@@ -56,3 +56,5 @@ target/
 # Spring
 application-local.yml
 application-local.properties
+otel/opentelemetry-javaagent.jar
+observability/otel-agent/
