@@ -158,7 +158,61 @@ stage('Docker Build') {
                                 }
                             }
                         }
+
+                        stage('Deploy to ASG') {
+                            steps {
+                                withCredentials([
+                                    [$class: 'AmazonWebServicesCredentialsBinding',
+                                     credentialsId: 'aws-patient-service']
+                                ]) {
+                                    sh '''
+                                        set -e
+
+                                        echo "Preparing deployment for image: ${ECR_REPO}:${IMAGE_TAG}"
+
+                                        sed "s/__IMAGE_TAG__/${IMAGE_TAG}/g" \
+                                            deployment/user-data.sh \
+                                            > /tmp/payment-user-data.sh
+
+                                        USER_DATA=$(base64 -i /tmp/payment-user-data.sh | tr -d '\\n')
+
+                                        echo "Creating new Launch Template version..."
+
+                                        aws ec2 create-launch-template-version \
+                                            --launch-template-name payment-service-lt \
+                                            --source-version '$Latest' \
+                                            --launch-template-data "{\"UserData\":\"${USER_DATA}\"}"
+
+                                        echo "Setting new version as default..."
+
+                                        aws ec2 modify-launch-template \
+                                            --launch-template-name payment-service-lt \
+                                            --default-version '$Latest'
+
+                                        echo "Updating Auto Scaling Group..."
+
+                                        aws autoscaling update-auto-scaling-group \
+                                            --auto-scaling-group-name payment-service-asg \
+                                            --launch-template \
+                                            LaunchTemplateName=payment-service-lt,Version='$Latest'
+
+                                        echo "Starting instance refresh..."
+
+                                        aws autoscaling start-instance-refresh \
+                                            --auto-scaling-group-name payment-service-asg \
+                                            --preferences \
+                                            MinHealthyPercentage=100,InstanceWarmup=120
+
+                                        echo "Deployment initiated successfully."
+                                    '''
+                                }
+                            }
+                        }
+
+
                     }
+
+
                 
 
   post {
