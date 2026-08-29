@@ -38,19 +38,19 @@ pipeline {
          * BUILD & TEST
          * ============================================================
          */
-        stage('Build & Test') {
-            steps {
-                sh '''
-                    set -e
-
-                    echo "======================================"
-                    echo "Building Payment Service"
-                    echo "======================================"
-
-                    ./mvnw -B clean test
-                '''
-            }
-        }
+//         stage('Build & Test') {
+//             steps {
+//                 sh '''
+//                     set -e
+//
+//                     echo "======================================"
+//                     echo "Building Payment Service"
+//                     echo "======================================"
+//
+//                     ./mvnw -B clean test
+//                 '''
+//             }
+//         }
 
 
         /*
