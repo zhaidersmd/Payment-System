@@ -178,10 +178,18 @@ stage('Docker Build') {
 
                                         echo "Creating new Launch Template version..."
 
+                                        # -----------------------------------------
+                                                        # Create JSON file
+                                                        # -----------------------------------------
+
+                                        cat > /tmp/launch-template-data.json <<EOF
+                                        {
+                                          "UserData": "${USER_DATA}"
+
                                         aws ec2 create-launch-template-version \
                                             --launch-template-name payment-service-lt \
                                             --source-version '$Latest' \
-                                            --launch-template-data "{\"UserData\":\"${USER_DATA}\"}"
+                                            --launch-template-data file:///tmp/launch-template-data.json
 
                                         echo "Setting new version as default..."
 
