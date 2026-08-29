@@ -13,6 +13,7 @@ pipeline {
 
     environment {
             AWS_REGION = 'ap-south-1'
+            ECR_REGISTRY = '774118824657.dkr.ecr.ap-south-1.amazonaws.com'
             ECR_REPO = '774118824657.dkr.ecr.ap-south-1.amazonaws.com/payment-service'
             IMAGE_TAG = "${BUILD_NUMBER}"
         }
@@ -130,7 +131,7 @@ stage('Docker Build') {
                                   --region ${AWS_REGION} | \
                                 docker login \
                                   --username AWS \
-                                  --password-stdin ${ECR_REPO}
+                                  --password-stdin ${ECR_REGISTRY}
                             '''
                         }
                     }
