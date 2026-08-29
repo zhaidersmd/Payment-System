@@ -1,6 +1,21 @@
+// docker run -d \
+//   --name jenkins \
+//   -p 8080:8080 \
+//   -p 50000:50000 \
+//   -v jenkins_home:/var/jenkins_home \
+//   -v ~/.docker/run/docker.sock:/var/run/docker.sock \
+//   --user root \
+//   my-jenkins:lts
+
 pipeline {
 
     agent any
+
+    environment {
+            AWS_REGION = 'ap-south-1'
+            ECR_REPO = '774118824657.dkr.ecr.ap-south-1.amazonaws.com/payment-service'
+            IMAGE_TAG = "${BUILD_NUMBER}"
+        }
 
     stages {
 
@@ -97,12 +112,53 @@ stage('Docker Build') {
             steps {
                 sh '''
                     docker build \
-                      -t payment-service:${BUILD_NUMBER} \
-                      .
+                        -t ${ECR_REPO}:${IMAGE_TAG} \
+                        -t ${ECR_REPO}:latest \
+                        .
                 '''
             }
         }
-  }
+
+        stage('ECR Login') {
+                    steps {
+                        withCredentials([
+                            [$class: 'AmazonWebServicesCredentialsBinding',
+                             credentialsId: 'aws-jenkins']
+                        ]) {
+                            sh '''
+                                aws ecr get-login-password \
+                                  --region ${AWS_REGION} | \
+                                docker login \
+                                  --username AWS \
+                                  --password-stdin ${ECR_REPO}
+                            '''
+                        }
+                    }
+                }
+
+                stage('Push Image') {
+                            steps {
+                                sh '''
+                                    docker push ${ECR_REPO}:${IMAGE_TAG}
+                                    docker push ${ECR_REPO}:latest
+                                '''
+                            }
+                        }
+
+                        stage('Deploy') {
+                            steps {
+                                withCredentials([
+                                    [$class: 'AmazonWebServicesCredentialsBinding',
+                                     credentialsId: 'aws-jenkins']
+                                ]) {
+                                    sh '''
+                                        echo "Deployment image: ${ECR_REPO}:${IMAGE_TAG}"
+                                    '''
+                                }
+                            }
+                        }
+                    }
+                
 
   post {
 
