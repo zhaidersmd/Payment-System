@@ -35,12 +35,13 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh '''
-                    echo "Building Docker image..."
+                    echo "Building Linux AMD64 Docker image..."
 
-                    docker build \
+                    docker buildx build \
                         --platform linux/amd64 \
                         -t ${ECR_REPO}:${IMAGE_TAG} \
                         -t ${ECR_REPO}:latest \
+                        --load \
                         .
                 '''
             }
