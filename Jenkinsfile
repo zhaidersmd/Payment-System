@@ -123,7 +123,7 @@ stage('Docker Build') {
                     steps {
                         withCredentials([
                             [$class: 'AmazonWebServicesCredentialsBinding',
-                             credentialsId: 'aws-jenkins']
+                             credentialsId: 'aws-patient-service']
                         ]) {
                             sh '''
                                 aws ecr get-login-password \
