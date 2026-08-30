@@ -37,23 +37,36 @@ pipeline {
                 sh '''
                     set -e
 
-                    echo "Building AMD64 Docker image..."
+                    echo "======================================"
+                    echo "Docker Build"
+                    echo "======================================"
 
-                    docker build \
+                    echo "Docker version:"
+                    docker version
+
+                    echo "Buildx version:"
+                    docker buildx version
+
+                    echo "Building AMD64 image..."
+
+                    docker buildx build \
                         --platform linux/amd64 \
-                        --no-cache \
+                        --load \
                         -t ${ECR_REPO}:${IMAGE_TAG} \
                         -t ${ECR_REPO}:latest \
                         .
 
-                    echo "Verifying image architecture..."
+                    echo "Verifying image platform..."
 
                     docker image inspect \
                         ${ECR_REPO}:${IMAGE_TAG} \
-                        --format 'OS={{.Os}} Architecture={{.Architecture}}'
+                        --format '{{.Os}}/{{.Architecture}}'
+
+                    echo "Docker image build completed successfully."
                 '''
             }
         }
+
 
 
         stage('ECR Login') {
