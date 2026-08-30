@@ -45,9 +45,6 @@ public class OutboxPublisher {
                 continue;
             }
 
-
-
-
             try {
                 kafkaEventPublisher.publish(
                         event.getAggregateId().toString(),

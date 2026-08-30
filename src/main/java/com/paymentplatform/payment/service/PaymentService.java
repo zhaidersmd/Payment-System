@@ -34,8 +34,6 @@ public class PaymentService {
     private final IdempotencyCacheService idempotencyCacheService;
     private final OutboxEventService outboxEventService;
 
-
-
     public PaymentService(PaymentRepository paymentRepository, IdempotencyRecordRepository recordRepository, ObjectMapper objectMapper, PaymentStatusCacheService cacheService, IdempotencyCacheService idempotencyCacheService, OutboxEventService outboxEventService) {
         this.paymentRepository = paymentRepository;
         this.recordRepository = recordRepository;
@@ -45,7 +43,6 @@ public class PaymentService {
         this.outboxEventService = outboxEventService;
 
     }
-
 
     private PaymentResponse toResponse(Payment payment) {
 
@@ -58,8 +55,6 @@ public class PaymentService {
     @Transactional
     public PaymentResponse createPayment(CreatePaymentRequest request, String idempotencyKey) {
 
-
-
         LocalDateTime now = LocalDateTime.now();
 
         if (idempotencyKey == null || idempotencyKey.isBlank()) {
@@ -67,30 +62,23 @@ public class PaymentService {
                     "Idempotency-Key header is required");
         }
 
-        String requestHash =
-                RequestHashUtil.generateHash(request);
-        //System.out.println("Hash is " + requestHash);
-
+        String requestHash = RequestHashUtil.generateHash(request);
 
         // =========================================================
         // CHANGE 1: Check Redis first
         // =========================================================
-
-        IdempotencyRecord existingRecord =
-                idempotencyCacheService.get(idempotencyKey);
-
+        // Race condtion. both request can find IdempotencyKey not found
+        IdempotencyRecord existingRecord = idempotencyCacheService.get(idempotencyKey);
 
         // =========================================================
         // CHANGE 2: Redis MISS → check PostgreSQL
         // =========================================================
 
         if (existingRecord == null) {
-            //System.out.println("existingRecord == null");
-            existingRecord =
-                    recordRepository
-                            .findByIdempotencyKey(idempotencyKey)
-                            .orElse(null);
 
+            existingRecord = recordRepository
+                    .findByIdempotencyKey(idempotencyKey)
+                    .orElse(null);
 
             // =====================================================
             // CHANGE 3: Found in PostgreSQL → populate Redis
@@ -104,16 +92,14 @@ public class PaymentService {
             }
         }
 
-
         // =========================================================
         // Existing idempotency record
         // =========================================================
 
         if (existingRecord != null) {
-            //System.out.println("Existing idempotency record. Sending from Redis");
+            log.info("Sending from Redis cache");
 
-            if (!existingRecord.getRequestHash()
-                    .equals(requestHash)) {
+            if (!existingRecord.getRequestHash().equals(requestHash)) {
 
                 throw new IdempotencyKeyConflictException(
                         "Idempotency-Key has already been used with a different request");
@@ -130,7 +116,6 @@ public class PaymentService {
             return toResponse(payment);
         }
 
-
         // =========================================================
         // New request → create payment
         // =========================================================
@@ -146,13 +131,10 @@ public class PaymentService {
         payment.setUpdatedAt(now);
         Payment savedPayment = paymentRepository.save(payment);
 
-
-//        Tested if outbox event does not save, payment instance will be rolled back
-//        if (1 == 1) {
-//            throw new RuntimeException("TEST OUTBOX FAILURE");
-//        }
-
-
+        //        Tested if outbox event does not save, payment instance will be rolled back
+        //        if (1 == 1) {
+        //            throw new RuntimeException("TEST OUTBOX FAILURE");
+        //        }
 
         outboxEventService.createPaymentCreatedEvent(
                 savedPayment.getId(),
@@ -161,11 +143,8 @@ public class PaymentService {
                 savedPayment.getCurrency()
         );
 
-
-
         PaymentResponse response =
                 toResponse(savedPayment);
-
 
         // =========================================================
         // Create idempotency record
@@ -182,9 +161,7 @@ public class PaymentService {
         record.setCreatedAt(now);
 
         try {
-            //System.out.println("Writing Response");
-            String responseBody =
-                    objectMapper.writeValueAsString(response);
+            String responseBody = objectMapper.writeValueAsString(response);
 
             record.setResponseBody(responseBody);
 
@@ -195,13 +172,11 @@ public class PaymentService {
                     e);
         }
 
-
         // =========================================================
         // PostgreSQL remains the source of truth
         // =========================================================
 
         recordRepository.save(record);
-
 
         // =========================================================
         // CHANGE 4: Populate Redis after DB save
@@ -211,19 +186,18 @@ public class PaymentService {
                 idempotencyKey,
                 record);
 
-
         return response;
     }
 
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public PaymentResponse getPayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow( () -> new PaymentNotFoundException(paymentId));
-        log.info("Found the payment instance {}" , payment);
+                .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+        log.info("Found the payment instance {}", payment);
         return toResponse(payment);
     }
 
-    public List<PaymentResponse> getAllPayments() {
+    public List < PaymentResponse > getAllPayments() {
 
         return paymentRepository.findAll()
                 .stream()
@@ -279,8 +253,8 @@ public class PaymentService {
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
 
         if (payment.getStatus() != PaymentStatus.AUTHORIZED) {
-            throw new InvalidPaymentStateException("Payment cannot be captured from status "
-                    + payment.getStatus());
+            throw new InvalidPaymentStateException("Payment cannot be captured from status " +
+                    payment.getStatus());
         }
 
         payment.setStatus(PaymentStatus.CAPTURED);
@@ -291,12 +265,12 @@ public class PaymentService {
 
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() ->
-                        new PaymentNotFoundException(paymentId ));
+                        new PaymentNotFoundException(paymentId));
 
         if (payment.getStatus() != PaymentStatus.CAPTURED) {
             throw new InvalidPaymentStateException(
-                    "Payment cannot be refunded from status "
-                            + payment.getStatus()
+                    "Payment cannot be refunded from status " +
+                            payment.getStatus()
             );
         }
 
@@ -304,7 +278,6 @@ public class PaymentService {
 
         return toResponse(payment);
     }
-
 
     public PaymentResponse getPaymentStatus(UUID paymentId) {
         log.info("going to check if cache exists");
@@ -324,6 +297,5 @@ public class PaymentService {
 
         return response;
     }
-
 
 }

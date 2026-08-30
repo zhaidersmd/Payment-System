@@ -1,4 +1,4 @@
-package com.paymentplatform.payment.config;
+package com.paymentplatform.payment.config.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,7 @@ public class KafkaConsumerConfig {
     public DefaultErrorHandler kafkaErrorHandler(
             DeadLetterPublishingRecoverer recoverer) {
 
-        FixedBackOff backOff =
-                new FixedBackOff(5000L, 2L);
+        FixedBackOff backOff =new FixedBackOff(5000L, 2L);
 
         return new DefaultErrorHandler(
                 recoverer,
