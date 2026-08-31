@@ -3,6 +3,7 @@ package com.paymentplatform.payment.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -69,6 +70,18 @@ public class GlobalExceptionHandler {
                 "status", HttpStatus.CONFLICT.value(),
                 "error", "IDEMPOTENCY_CONFLICT",
                 "message", "A request with this idempotency key is already being processed."
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Map<String, Object> handleBadCredentialsException(BadCredentialsException exception) {
+
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.UNAUTHORIZED.value(),
+                "error", "INVALID_CREDENTIALS",
+                "message", "Invalid username or password"
         );
     }
 
