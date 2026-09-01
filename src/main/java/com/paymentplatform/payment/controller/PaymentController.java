@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/payments")
+@RequestMapping({"/api/v1/payments", "/payments"})
 @CrossOrigin(origins = "http://localhost:5173")
 public class PaymentController {
 
