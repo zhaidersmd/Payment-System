@@ -18,6 +18,7 @@ import com.paymentplatform.payment.util.RequestHashUtil;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -190,6 +191,9 @@ public class PaymentService {
     }
 
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @PreAuthorize(
+            "@paymentOwnershipService.canAccessPayment(#paymentId, authentication)"
+    )
     public PaymentResponse getPayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
@@ -197,6 +201,9 @@ public class PaymentService {
         return toResponse(payment);
     }
 
+    @PreAuthorize(
+            "@paymentOwnershipService.canAccessAllPayments(authentication)"
+    )
     public List < PaymentResponse > getAllPayments() {
 
         return paymentRepository.findAll()
@@ -204,6 +211,7 @@ public class PaymentService {
                 .map(this::toResponse)
                 .toList();
     }
+
 
     public PaymentResponse updatePayment(
             UUID paymentId,
@@ -235,6 +243,7 @@ public class PaymentService {
     }
 
     @Transactional
+    @PreAuthorize( "paymentOwnershipService.canAccessPayment(#paymentId, authentication)")
     public PaymentResponse authorizePayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
@@ -248,6 +257,9 @@ public class PaymentService {
 
     }
     @Transactional
+    @PreAuthorize(
+            "paymentOwnershipService.canAccessPayment(#paymentId, authentication)"
+    )
     public PaymentResponse capturePayment(UUID paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException(paymentId));
@@ -261,6 +273,9 @@ public class PaymentService {
         return toResponse(payment);
     }
     @Transactional
+    @PreAuthorize(
+            "paymentOwnershipService.canAccessPayment(#paymentId, authentication)"
+    )
     public PaymentResponse refundPayment(UUID paymentId) {
 
         Payment payment = paymentRepository.findById(paymentId)
@@ -279,6 +294,7 @@ public class PaymentService {
         return toResponse(payment);
     }
 
+    @PreAuthorize( "paymentOwnershipService.canAccessPayment(#paymentId, authentication)")
     public PaymentResponse getPaymentStatus(UUID paymentId) {
         log.info("going to check if cache exists");
         PaymentResponse cachedResponse = cacheService.get(paymentId);

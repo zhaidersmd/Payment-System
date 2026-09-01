@@ -1,23 +1,33 @@
 package com.paymentplatform.payment.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
-@Table(name = "customers", uniqueConstraints =  @UniqueConstraint(columnNames = "user_id"))
+@Getter
+@Setter
+@ToString
+@Table(name = "customers", uniqueConstraints = @UniqueConstraint(columnNames = "user_id"))
 public class Customer {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "user_id",
+    @Column(
+            name = "customer_id",
             nullable = false,
-            unique = true
+            unique = true,
+            length = 50
     )
+    private String customerId;
+
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @Column(nullable = false, updatable = false)
@@ -26,22 +36,6 @@ public class Customer {
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
 

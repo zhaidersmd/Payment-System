@@ -4,10 +4,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -46,7 +48,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.CONFLICT,
                 "error", "CONCURRENT_UPDATE",
-                "message", "Payment was modified by another request"
+                "message", exception.getMessage()
         );
     }
 
@@ -57,7 +59,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.CONFLICT,
                 "error", "IdempotencyKeyConflictException",
-                "message", "Idempotency-Key has already been used with a different request"
+                "message", exception.getMessage()
         );
     }
 
@@ -69,7 +71,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.CONFLICT.value(),
                 "error", "IDEMPOTENCY_CONFLICT",
-                "message", "A request with this idempotency key is already being processed."
+                "message", exception.getMessage()
         );
     }
 
@@ -81,8 +83,20 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.UNAUTHORIZED.value(),
                 "error", "INVALID_CREDENTIALS",
-                "message", "Invalid username or password"
+                "message", exception.getMessage()
         );
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, Object> handleAuthorizationDeniedException(AuthorizationDeniedException exception) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.FORBIDDEN,
+                "error", "FORBIDDEN",
+                "message", exception.getMessage()
+        );
+
     }
 
     @ExceptionHandler(Exception.class)
@@ -93,7 +107,7 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "error", "INTERNAL_SERVER_ERROR",
-                "message", "An unexpected error occurred"
+                "message", exception.getMessage()
         );
     }
 

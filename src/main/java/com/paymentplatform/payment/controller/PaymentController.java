@@ -43,6 +43,7 @@ public class PaymentController {
 
     @GetMapping("/{paymentId}")
     public PaymentResponse getPayment(@PathVariable UUID paymentId) {
+
         return paymentService.getPayment(paymentId);
     }
 
@@ -54,31 +55,24 @@ public class PaymentController {
 
     @PutMapping("/{paymentId}")
     public PaymentResponse updatePayment(@PathVariable UUID paymentId, @Valid @RequestBody UpdatePaymentRequest request) {
-
         return paymentService.updatePayment(paymentId, request);
     }
 
     @DeleteMapping("/{paymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePayment(@PathVariable UUID paymentId) {
-
         paymentService.deletePayment(paymentId);
     }
 
     @PostMapping("/{id}/authorize")
     public ResponseEntity<PaymentResponse> authorizePayment(@PathVariable UUID id) {
-
         PaymentResponse paymentResponse = paymentService.authorizePayment(id);
         return ResponseEntity.ok(paymentResponse);
-
-
     }
 
     @PostMapping("/{id}/capture")
     public ResponseEntity<PaymentResponse> capturePayment(@PathVariable UUID id) {
-
         PaymentResponse response = paymentService.capturePayment(id);
-
         return ResponseEntity.ok(response);
     }
 
@@ -91,15 +85,11 @@ public class PaymentController {
 
     @GetMapping("/{paymentId}/status")
     public ResponseEntity<PaymentResponse> getPaymentStatus(@PathVariable UUID paymentId) {
-
         return ResponseEntity.ok(paymentService.getPaymentStatus(paymentId));
-
-
     }
 
     @GetMapping("/customer/{customerId}/summary")
     public PaymentSummaryResponse getCustomerPaymentSummary(@PathVariable String customerId) {
-
         return paymentAnalyticsService.getCustomerPaymentSummary(customerId);
     }
 
